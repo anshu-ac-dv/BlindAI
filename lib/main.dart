@@ -8,29 +8,27 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   // Load environment variables
-  try {
-    await dotenv.load(fileName: ".env");
-  } catch (e) {
-    debugPrint("Warning: .env file not found. AI features may not work.");
-  }
+  await dotenv.load(fileName: ".env").catchError((_) {});
 
+  // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+
+  runApp(const BlindAIApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class BlindAIApp extends StatelessWidget {
+  const BlindAIApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Simple App',
+      title: 'Blind AI',
       theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
         useMaterial3: true,
-        colorSchemeSeed: Colors.blue,
       ),
       home: const SplashScreen(),
     );

@@ -1,13 +1,14 @@
 import 'package:blind_ai/main.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('Splash screen smoke test', (WidgetTester tester) async {
+  testWidgets('App smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(const BlindAIApp());
 
-    // Verify that Splash Screen text is present.
-    expect(find.text('Blind AI'), findsOneWidget);
-    expect(find.text('YOUR INTELLIGENT COMPANION'), findsOneWidget);
+    // Verify that Splash Screen (FlutterLogo) is present.
+    expect(find.byType(FlutterLogo), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 }
