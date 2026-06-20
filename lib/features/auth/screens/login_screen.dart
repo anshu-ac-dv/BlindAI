@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../../../core/utils/app_alerts.dart';
 import '../services/auth_service.dart';
 import 'signup_screen.dart';
 import '../../chat/screens/chat_screen.dart';
@@ -22,9 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields'), behavior: SnackBarBehavior.floating),
-      );
+      AppAlerts.showError(context, 'Please fill in all fields to log in.');
       return;
     }
 
@@ -42,12 +41,29 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login failed: $e'), behavior: SnackBarBehavior.floating, backgroundColor: Colors.redAccent),
-        );
+        AppAlerts.showError(context, 'Login Failed: $e');
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  void _onResetPassword() async {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) {
+      AppAlerts.showError(context, 'Please enter your email to receive a reset link.');
+      return;
+    }
+
+    try {
+      await _authService.sendPasswordResetEmail(email);
+      if (mounted) {
+        AppAlerts.showSuccess(context, 'A password reset link has been sent to your email.');
+      }
+    } catch (e) {
+      if (mounted) {
+        AppAlerts.showError(context, 'Reset Failed: $e');
+      }
     }
   }
 
@@ -118,7 +134,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     isPassword: true,
                   ).animate().fadeIn(delay: const Duration(milliseconds: 500)).slideY(begin: 0.1, end: 0),
                   
-                  const SizedBox(height: 40),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: _onResetPassword,
+                      child: Text(
+                        'Forgot Password?',
+                        style: TextStyle(color: colorScheme.primary, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ).animate().fadeIn(delay: const Duration(milliseconds: 600)),
+                  
+                  const SizedBox(height: 30),
                   
                   SizedBox(
                     width: double.infinity,

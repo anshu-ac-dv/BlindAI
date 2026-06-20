@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../../../core/utils/app_alerts.dart';
 import '../services/auth_service.dart';
 import '../../chat/screens/chat_screen.dart';
 
@@ -21,9 +22,7 @@ class _SignupScreenState extends State<SignupScreen> {
     final password = _passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields'), behavior: SnackBarBehavior.floating),
-      );
+      AppAlerts.showError(context, 'Please provide both email and password to sign up.');
       return;
     }
 
@@ -42,9 +41,7 @@ class _SignupScreenState extends State<SignupScreen> {
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Signup failed: $e'), behavior: SnackBarBehavior.floating, backgroundColor: Colors.redAccent),
-        );
+        AppAlerts.showError(context, 'Signup Failed: $e');
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
