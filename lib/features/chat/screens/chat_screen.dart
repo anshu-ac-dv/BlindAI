@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_generative_ai/google_generative_ai.dart' as gemini;
 import '../../../core/models/message_model.dart';
 import '../../auth/services/auth_service.dart';
 import '../../auth/screens/login_screen.dart';
+import '../services/api_service.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -14,32 +16,63 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
   final List<Message> _messages = [];
   final AuthService _authService = AuthService();
+  final ApiService _apiService = ApiService();
+  bool _isLoading = false;
 
-  void _sendMessage() {
-    if (_controller.text.trim().isEmpty) return;
+  void _sendMessage() async {
+    final text = _controller.text.trim();
+    if (text.isEmpty || _isLoading) return;
     
     setState(() {
       _messages.insert(0, Message(
-        text: _controller.text.trim(),
+        text: text,
         isUser: true,
         time: DateTime.now(),
       ));
-      
-      // Echo response for simple design
-      _messages.insert(0, Message(
-        text: "You said: ${_controller.text.trim()}",
-        isUser: false,
-        time: DateTime.now(),
-      ));
+      _isLoading = true;
     });
     _controller.clear();
+
+    try {
+      // Convert history for Gemini
+      final history = _messages.skip(1).take(10).toList().reversed.map((m) {
+        return gemini.Content(
+          m.isUser ? 'user' : 'model',
+          [gemini.TextPart(m.text)],
+        );
+      }).toList();
+
+      final response = await _apiService.sendMessage(text, history: history);
+
+      if (mounted) {
+        setState(() {
+          _messages.insert(0, Message(
+            text: response,
+            isUser: false,
+            time: DateTime.now(),
+          ));
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _messages.insert(0, Message(
+            text: "❌ Error: $e",
+            isUser: false,
+            time: DateTime.now(),
+          ));
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Simple Chat'),
+        title: const Text('Blind AI'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -56,6 +89,8 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
+          if (_isLoading)
+            const LinearProgressIndicator(),
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
@@ -89,6 +124,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       hintText: 'Type a message...',
                       border: OutlineInputBorder(),
                     ),
+                    onSubmitted: (_) => _sendMessage(),
                   ),
                 ),
                 IconButton(
