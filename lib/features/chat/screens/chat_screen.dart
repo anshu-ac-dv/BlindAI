@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../core/models/message_model.dart';
 import '../../auth/services/auth_service.dart';
 import '../../auth/screens/login_screen.dart';
@@ -18,6 +20,9 @@ class _ChatScreenState extends State<ChatScreen> {
   final List<Message> _messages = [];
   final AuthService _authService = AuthService();
   final ApiService _apiService = ApiService();
+  final ImagePicker _picker = ImagePicker();
+  
+  XFile? _selectedImage;
   bool _isLoading = false;
 
   void _scrollToBottom() {
@@ -32,23 +37,46 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  Future<void> _pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      setState(() {
+        _selectedImage = image;
+      });
+    }
+  }
+
   void _onSend() async {
     final text = _controller.text.trim();
-    if (text.isEmpty || _isLoading) return;
+    if ((text.isEmpty && _selectedImage == null) || _isLoading) return;
 
+    final currentImage = _selectedImage;
     setState(() {
       _messages.insert(0, Message(
-        text: text,
+        text: text.isEmpty ? "Describe this image" : text,
         isUser: true,
         time: DateTime.now(),
+        imagePath: currentImage?.path,
       ));
       _isLoading = true;
+      _selectedImage = null;
     });
     _controller.clear();
     _scrollToBottom();
 
     try {
-      final response = await _apiService.getResponse(text);
+      String response;
+      if (currentImage != null) {
+        final bytes = await currentImage.readAsBytes();
+        response = await _apiService.getResponse(
+          text.isEmpty ? "What is in this image? Describe it for a blind person." : text,
+          imageBytes: bytes,
+          mimeType: 'image/jpeg',
+        );
+      } else {
+        response = await _apiService.getResponse(text);
+      }
+
       if (mounted) {
         setState(() {
           _messages.insert(0, Message(
@@ -80,24 +108,32 @@ class _ChatScreenState extends State<ChatScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
+      backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
-        title: Text(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [colorScheme.primary, colorScheme.secondary],
+            ),
+          ),
+        ),
+        title: const Text(
           'Blind AI',
-          style: TextStyle(fontWeight: FontWeight.w900, color: colorScheme.primary),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: colorScheme.surface,
-        elevation: 0,
         actions: [
           IconButton(
-            icon: Icon(Icons.logout_rounded, color: colorScheme.onSurface.withAlpha(127)),
+            icon: const Icon(Icons.logout_rounded, color: Colors.white),
             onPressed: () async {
               final navigator = Navigator.of(context);
               await _authService.signOut();
               if (!mounted) return;
               navigator.pushReplacement(
-                MaterialPageRoute(builder: (_) => const LoginScreen()),
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => const LoginScreen(),
+                  transitionsBuilder: (_, animation, __, child) => FadeTransition(opacity: animation, child: child),
+                ),
               );
             },
           ),
@@ -110,21 +146,58 @@ class _ChatScreenState extends State<ChatScreen> {
                 ? _buildEmptyState(colorScheme)
                 : ListView.builder(
                     controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                     reverse: true,
                     itemCount: _messages.length,
                     itemBuilder: (context, index) {
                       return _MessageBubble(
                         message: _messages[index],
-                        isLast: index == 0,
                       );
                     },
                   ),
           ),
+          if (_selectedImage != null) _buildImagePreview(),
           _buildInputArea(colorScheme),
         ],
       ),
     );
+  }
+
+  Widget _buildImagePreview() {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
+      ),
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.file(
+              File(_selectedImage!.path),
+              height: 100,
+              width: 100,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: GestureDetector(
+              onTap: () => setState(() => _selectedImage = null),
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: const BoxDecoration(color: Colors.black54, shape: BoxShape.circle),
+                child: const Icon(Icons.close, color: Colors.white, size: 16),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ).animate().scale();
   }
 
   Widget _buildEmptyState(ColorScheme colorScheme) {
@@ -132,80 +205,68 @@ class _ChatScreenState extends State<ChatScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.chat_bubble_outline_rounded, size: 80, color: colorScheme.primary.withAlpha(25))
+          Icon(Icons.camera_alt_rounded, size: 100, color: colorScheme.primary.withAlpha(40))
               .animate(onPlay: (c) => c.repeat())
-              .shimmer(duration: const Duration(seconds: 2)),
-          const SizedBox(height: 20),
+              .shimmer(duration: 2.seconds)
+              .scale(begin: const Offset(1, 1), end: const Offset(1.1, 1.1), duration: 2.seconds, curve: Curves.easeInOut),
+          const SizedBox(height: 24),
           Text(
-            'Start a conversation',
+            'Take a photo to see the world',
             style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: colorScheme.onSurface.withAlpha(76),
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: colorScheme.primary.withAlpha(150),
             ),
-          ),
+          ).animate().fadeIn(duration: 800.ms),
         ],
-      ).animate().fadeIn(duration: const Duration(milliseconds: 800)),
+      ),
     );
   }
 
   Widget _buildInputArea(ColorScheme colorScheme) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 30),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
       decoration: BoxDecoration(
-        color: colorScheme.surface,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(12),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
-          ),
-        ],
+        color: Colors.white,
+        borderRadius: const BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+        boxShadow: [BoxShadow(color: Colors.black.withAlpha(10), blurRadius: 20, offset: const Offset(0, -5))],
       ),
       child: Row(
         children: [
+          IconButton(
+            icon: Icon(Icons.camera_alt_rounded, color: colorScheme.primary),
+            onPressed: _pickImage,
+          ),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainerHighest.withAlpha(127),
-                borderRadius: BorderRadius.circular(30),
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(25)),
               child: TextField(
                 controller: _controller,
                 maxLines: null,
                 decoration: InputDecoration(
-                  hintText: 'Ask me anything...',
-                  hintStyle: TextStyle(color: colorScheme.onSurface.withAlpha(76)),
+                  hintText: 'Ask about something...',
                   border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 ),
                 onSubmitted: (_) => _onSend(),
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           GestureDetector(
             onTap: _onSend,
             child: Container(
-              height: 50,
-              width: 50,
+              height: 48,
+              width: 48,
               decoration: BoxDecoration(
-                color: colorScheme.primary,
+                gradient: LinearGradient(colors: [colorScheme.primary, colorScheme.secondary]),
                 shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.primary.withAlpha(76),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
               ),
               child: _isLoading 
                 ? const Center(child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)))
-                : const Icon(Icons.arrow_upward_rounded, color: Colors.white),
+                : const Icon(Icons.send_rounded, color: Colors.white, size: 20),
             ),
-          ).animate(target: _isLoading ? 0 : 1).scale(),
+          ),
         ],
       ),
     );
@@ -214,9 +275,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
 class _MessageBubble extends StatelessWidget {
   final Message message;
-  final bool isLast;
   
-  const _MessageBubble({required this.message, this.isLast = false});
+  const _MessageBubble({required this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -225,36 +285,43 @@ class _MessageBubble extends StatelessWidget {
 
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
-        margin: const EdgeInsets.symmetric(vertical: 6),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-        decoration: BoxDecoration(
-          color: isUser ? colorScheme.primary : colorScheme.surfaceContainerHighest.withAlpha(127),
-          borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(24),
-            topRight: const Radius.circular(24),
-            bottomLeft: Radius.circular(isUser ? 24 : 4),
-            bottomRight: Radius.circular(isUser ? 4 : 24),
+      child: Column(
+        crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          if (message.imagePath != null)
+            Container(
+              margin: const EdgeInsets.only(bottom: 4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.file(File(message.imagePath!), width: 200, height: 200, fit: BoxFit.cover),
+              ),
+            ).animate().fadeIn().scale(),
+          Container(
+            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+            decoration: BoxDecoration(
+              gradient: isUser 
+                  ? LinearGradient(colors: [colorScheme.primary, colorScheme.primary.withAlpha(200)])
+                  : LinearGradient(colors: [Colors.white, Colors.grey.shade50]),
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(20),
+                topRight: const Radius.circular(20),
+                bottomLeft: Radius.circular(isUser ? 20 : 4),
+                bottomRight: Radius.circular(isUser ? 4 : 20),
+              ),
+              boxShadow: [BoxShadow(color: Colors.black.withAlpha(5), blurRadius: 5)],
+            ),
+            child: Text(
+              message.text,
+              style: TextStyle(color: isUser ? Colors.white : Colors.black87, fontSize: 16),
+            ),
           ),
-          boxShadow: isUser ? [
-            BoxShadow(
-              color: colorScheme.primary.withAlpha(51),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            )
-          ] : null,
-        ),
-        child: Text(
-          message.text,
-          style: TextStyle(
-            color: isUser ? colorScheme.onPrimary : colorScheme.onSurfaceVariant,
-            fontSize: 16,
-            height: 1.4,
-            fontWeight: isUser ? FontWeight.w500 : FontWeight.normal,
-          ),
-        ),
-      ),
-    ).animate().fadeIn(duration: const Duration(milliseconds: 400)).slideY(begin: 0.1, end: 0);
+        ],
+      ).animate().fadeIn().slideX(begin: isUser ? 0.1 : -0.1),
+    );
   }
 }

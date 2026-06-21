@@ -27,8 +27,14 @@ class BlindAIApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Blind AI',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
         useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF673AB7),
+          primary: const Color(0xFF673AB7),
+          secondary: const Color(0xFFFF4081),
+          tertiary: const Color(0xFF00BFA5),
+        ),
+        fontFamily: 'Inter',
       ),
       home: const SplashScreen(),
     );

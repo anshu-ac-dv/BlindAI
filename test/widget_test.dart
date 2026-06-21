@@ -7,8 +7,8 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const BlindAIApp());
 
-    // Verify that Splash Screen (FlutterLogo) is present.
-    expect(find.byType(FlutterLogo), findsOneWidget);
+    // Verify that Splash Screen (Eye icon) is present.
+    expect(find.byIcon(Icons.remove_red_eye_rounded), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 }

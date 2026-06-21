@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigateToNext() async {
-    await Future.delayed(const Duration(milliseconds: 3000));
+    await Future.delayed(const Duration(milliseconds: 3500));
     if (!mounted) return;
 
     final authService = AuthService();
@@ -30,9 +30,15 @@ class _SplashScreenState extends State<SplashScreen> {
         pageBuilder: (context, animation, secondaryAnimation) => 
             isLoggedIn ? const ChatScreen() : const LoginScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: animation, child: child);
+          return FadeTransition(
+            opacity: animation,
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 1.1, end: 1.0).animate(animation),
+              child: child,
+            ),
+          );
         },
-        transitionDuration: const Duration(milliseconds: 800),
+        transitionDuration: const Duration(milliseconds: 1000),
       ),
     );
   }
@@ -42,100 +48,105 @@ class _SplashScreenState extends State<SplashScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              colorScheme.primaryContainer,
-              colorScheme.surface,
-              colorScheme.secondaryContainer.withAlpha(127),
-            ],
+      body: Stack(
+        children: [
+          // Background colorful gradient
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  colorScheme.primary,
+                  colorScheme.secondary,
+                  colorScheme.tertiary,
+                ],
+              ),
+            ),
+          ).animate().fadeIn(duration: 1.seconds),
+          
+          // Animated patterns
+          Positioned(
+            top: -100,
+            left: -100,
+            child: CircleAvatar(
+              radius: 150,
+              backgroundColor: Colors.white.withAlpha(20),
+            ).animate(onPlay: (c) => c.repeat(reverse: true)).scale(
+              begin: const Offset(1, 1),
+              end: const Offset(1.2, 1.2),
+              duration: 3.seconds,
+              curve: Curves.easeInOut,
+            ),
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Dynamic Animated Logo
-            Stack(
-              alignment: Alignment.center,
+
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Glowing Logo
                 Container(
                   width: 120,
                   height: 120,
                   decoration: BoxDecoration(
-                    color: colorScheme.primary.withAlpha(25),
+                    color: Colors.white,
                     shape: BoxShape.circle,
-                  ),
-                )
-                .animate(onPlay: (controller) => controller.repeat(reverse: true))
-                .scale(begin: const Offset(1, 1), end: const Offset(1.5, 1.5), duration: const Duration(seconds: 2), curve: Curves.easeInOut),
-                
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: colorScheme.primary,
-                    borderRadius: BorderRadius.circular(24),
                     boxShadow: [
                       BoxShadow(
-                        color: colorScheme.primary.withAlpha(102),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
+                        color: Colors.white.withAlpha(100),
+                        blurRadius: 30,
+                        spreadRadius: 10,
                       ),
                     ],
                   ),
-                  child: const Icon(Icons.remove_red_eye_rounded, color: Colors.white, size: 40),
+                  child: Icon(
+                    Icons.remove_red_eye_rounded,
+                    color: colorScheme.primary,
+                    size: 60,
+                  ),
                 )
                 .animate()
-                .fadeIn(duration: const Duration(milliseconds: 800))
-                .scale(delay: const Duration(milliseconds: 200), curve: Curves.elasticOut),
+                .scale(duration: 800.ms, curve: Curves.elasticOut)
+                .shimmer(delay: 1.seconds, duration: 2.seconds),
+                
+                const SizedBox(height: 30),
+                
+                Text(
+                  'Blind AI',
+                  style: const TextStyle(
+                    fontSize: 48,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    letterSpacing: -1.5,
+                  ),
+                )
+                .animate()
+                .fadeIn(delay: 400.ms, duration: 800.ms)
+                .slideY(begin: 0.3, end: 0, curve: Curves.easeOutBack),
+                
+                Text(
+                  'Your Visionary Companion',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white.withAlpha(200),
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.5,
+                  ),
+                )
+                .animate()
+                .fadeIn(delay: 800.ms)
+                .slideY(begin: 0.5, end: 0),
+                
+                const SizedBox(height: 80),
+                
+                const CircularProgressIndicator(
+                  strokeWidth: 3,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ).animate().fadeIn(delay: 1200.ms),
               ],
             ),
-            
-            const SizedBox(height: 40),
-            
-            Text(
-              'Blind AI',
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.w900,
-                color: colorScheme.onSurface,
-                letterSpacing: -1,
-              ),
-            )
-            .animate()
-            .fadeIn(delay: const Duration(milliseconds: 400), duration: const Duration(milliseconds: 800))
-            .slideY(begin: 0.3, end: 0, curve: Curves.easeOutBack),
-            
-            const SizedBox(height: 8),
-            
-            Text(
-              'Your Visionary Companion',
-              style: TextStyle(
-                fontSize: 16,
-                color: colorScheme.onSurface.withAlpha(153),
-                fontWeight: FontWeight.w500,
-              ),
-            )
-            .animate()
-            .fadeIn(delay: const Duration(milliseconds: 600))
-            .scale(delay: const Duration(milliseconds: 600)),
-            
-            const SizedBox(height: 100),
-            
-            SizedBox(
-              width: 40,
-              height: 40,
-              child: CircularProgressIndicator(
-                strokeWidth: 3,
-                valueColor: AlwaysStoppedAnimation<Color>(colorScheme.primary),
-              ),
-            ).animate().fadeIn(delay: const Duration(milliseconds: 1000)),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

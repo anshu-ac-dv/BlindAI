@@ -22,7 +22,7 @@ class _SignupScreenState extends State<SignupScreen> {
     final password = _passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      AppAlerts.showError(context, 'Please provide both email and password to sign up.');
+      AppAlerts.showError(context, 'Please fill in all fields.');
       return;
     }
 
@@ -35,14 +35,12 @@ class _SignupScreenState extends State<SignupScreen> {
         PageRouteBuilder(
           pageBuilder: (_, __, ___) => const ChatScreen(),
           transitionsBuilder: (_, animation, __, child) => FadeTransition(opacity: animation, child: child),
-          transitionDuration: const Duration(milliseconds: 600),
+          transitionDuration: const Duration(milliseconds: 800),
         ),
         (route) => false,
       );
     } catch (e) {
-      if (mounted) {
-        AppAlerts.showError(context, 'Signup Failed: $e');
-      }
+      if (mounted) AppAlerts.showError(context, 'Signup Failed: $e');
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -53,112 +51,114 @@ class _SignupScreenState extends State<SignupScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: colorScheme.onSurface),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
       body: Stack(
         children: [
-          Positioned(
-            bottom: -100,
-            left: -100,
-            child: Container(
-              width: 300,
-              height: 300,
-              decoration: BoxDecoration(
-                color: colorScheme.secondary.withAlpha(12),
-                shape: BoxShape.circle,
+          // Colorful Background
+          Container(
+            height: MediaQuery.of(context).size.height * 0.4,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [colorScheme.secondary, colorScheme.tertiary],
               ),
-            ).animate().scale(duration: const Duration(seconds: 2), curve: Curves.easeInOut),
+              borderRadius: const BorderRadius.only(
+                bottomRight: Radius.circular(60),
+              ),
+            ),
           ),
           
           SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Create\nAccount',
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.w900,
-                      height: 1.1,
-                      color: colorScheme.onSurface,
-                      letterSpacing: -1,
-                    ),
-                  ).animate().fadeIn(duration: const Duration(milliseconds: 600)).slideX(begin: -0.2, end: 0),
-                  
-                  const SizedBox(height: 12),
-                  
-                  Text(
-                    'Join the visionary community today.',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: colorScheme.onSurface.withAlpha(153),
-                    ),
-                  ).animate().fadeIn(delay: const Duration(milliseconds: 200)),
-                  
-                  const SizedBox(height: 60),
-                  
-                  _buildTextField(
-                    controller: _emailController,
-                    label: 'Email',
-                    icon: Icons.email_outlined,
-                  ).animate().fadeIn(delay: const Duration(milliseconds: 400)).slideY(begin: 0.1, end: 0),
-                  
                   const SizedBox(height: 20),
-                  
-                  _buildTextField(
-                    controller: _passwordController,
-                    label: 'Password',
-                    icon: Icons.lock_outline,
-                    isPassword: true,
-                  ).animate().fadeIn(delay: const Duration(milliseconds: 500)).slideY(begin: 0.1, end: 0),
-                  
-                  const SizedBox(height: 40),
-                  
-                  SizedBox(
-                    width: double.infinity,
-                    height: 60,
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : _onSignup,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colorScheme.primary,
-                        foregroundColor: colorScheme.onPrimary,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                      ),
-                      child: _isLoading 
-                        ? const CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
-                        : const Text('Sign Up', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    ),
-                  ).animate().fadeIn(delay: const Duration(milliseconds: 700)).scale(begin: const Offset(0.95, 0.95)),
-                  
-                  const SizedBox(height: 40),
-                  
-                  Center(
-                    child: TextButton(
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
                       onPressed: () => Navigator.pop(context),
-                      child: RichText(
-                        text: TextSpan(
-                          style: TextStyle(color: colorScheme.onSurface.withAlpha(153), fontSize: 16),
-                          children: [
-                            const TextSpan(text: "Already a member? "),
-                            TextSpan(
-                              text: 'Login',
-                              style: TextStyle(color: colorScheme.primary, fontWeight: FontWeight.bold),
-                            ),
-                          ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Create Account',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ).animate().fadeIn().slideX(begin: -0.2, end: 0),
+                  const SizedBox(height: 80),
+                  
+                  // Signup Card
+                  Container(
+                    padding: const EdgeInsets.all(32),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(20),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
                         ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        _buildTextField(
+                          controller: _emailController,
+                          label: 'Email',
+                          icon: Icons.email_rounded,
+                        ),
+                        const SizedBox(height: 20),
+                        _buildTextField(
+                          controller: _passwordController,
+                          label: 'Password',
+                          icon: Icons.lock_rounded,
+                          isPassword: true,
+                        ),
+                        const SizedBox(height: 40),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 55,
+                          child: ElevatedButton(
+                            onPressed: _isLoading ? null : _onSignup,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: colorScheme.secondary,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              elevation: 5,
+                              shadowColor: colorScheme.secondary.withAlpha(100),
+                            ),
+                            child: _isLoading 
+                              ? const CircularProgressIndicator(color: Colors.white)
+                              : const Text('SIGN UP', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                          ),
+                        ).animate().scale(delay: 400.ms),
+                      ],
+                    ),
+                  ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1, end: 0),
+                  
+                  const SizedBox(height: 40),
+                  
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: RichText(
+                      text: TextSpan(
+                        style: const TextStyle(color: Colors.grey, fontSize: 16),
+                        children: [
+                          const TextSpan(text: "Already have an account? "),
+                          TextSpan(
+                            text: 'Login',
+                            style: TextStyle(color: colorScheme.secondary, fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                     ),
-                  ).animate().fadeIn(delay: const Duration(milliseconds: 900)),
+                  ).animate().fadeIn(delay: 600.ms),
                 ],
               ),
             ),
@@ -175,21 +175,22 @@ class _SignupScreenState extends State<SignupScreen> {
     bool isPassword = false,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest.withAlpha(76),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: colorScheme.outline.withAlpha(25)),
-      ),
-      child: TextField(
-        controller: controller,
-        obscureText: isPassword,
-        decoration: InputDecoration(
-          labelText: label,
-          prefixIcon: Icon(icon, color: colorScheme.primary),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+    return TextField(
+      controller: controller,
+      obscureText: isPassword,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon, color: colorScheme.secondary),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(color: Colors.grey.shade200),
         ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(color: colorScheme.secondary, width: 2),
+        ),
+        filled: true,
+        fillColor: Colors.grey.shade50,
       ),
     );
   }

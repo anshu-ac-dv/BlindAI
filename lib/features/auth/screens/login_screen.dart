@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      AppAlerts.showError(context, 'Please fill in all fields to log in.');
+      AppAlerts.showError(context, 'Please fill in all fields.');
       return;
     }
 
@@ -36,13 +36,11 @@ class _LoginScreenState extends State<LoginScreen> {
         PageRouteBuilder(
           pageBuilder: (_, __, ___) => const ChatScreen(),
           transitionsBuilder: (_, animation, __, child) => FadeTransition(opacity: animation, child: child),
-          transitionDuration: const Duration(milliseconds: 600),
+          transitionDuration: const Duration(milliseconds: 800),
         ),
       );
     } catch (e) {
-      if (mounted) {
-        AppAlerts.showError(context, 'Login Failed: $e');
-      }
+      if (mounted) AppAlerts.showError(context, 'Login Failed: $e');
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -72,119 +70,120 @@ class _LoginScreenState extends State<LoginScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: Stack(
         children: [
-          // Background Decoration
-          Positioned(
-            top: -100,
-            right: -100,
-            child: Container(
-              width: 300,
-              height: 300,
-              decoration: BoxDecoration(
-                color: colorScheme.primary.withAlpha(12),
-                shape: BoxShape.circle,
+          // Colorful Background
+          Container(
+            height: MediaQuery.of(context).size.height * 0.4,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [colorScheme.primary, colorScheme.secondary],
               ),
-            ).animate().scale(duration: const Duration(seconds: 2), curve: Curves.easeInOut),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(60),
+              ),
+            ),
           ),
           
           SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 40.0),
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 60),
-                  
-                  Text(
+                  const Icon(Icons.remove_red_eye_rounded, size: 80, color: Colors.white)
+                      .animate()
+                      .scale(duration: 600.ms, curve: Curves.easeOutBack)
+                      .shimmer(delay: 1.seconds),
+                  const SizedBox(height: 20),
+                  const Text(
                     'Welcome Back',
                     style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.w900,
-                      color: colorScheme.onSurface,
-                      letterSpacing: -1,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
-                  ).animate().fadeIn(duration: const Duration(milliseconds: 600)).slideX(begin: -0.2, end: 0),
+                  ).animate().fadeIn().slideY(begin: 0.2, end: 0),
+                  const SizedBox(height: 80),
                   
-                  const SizedBox(height: 12),
-                  
-                  Text(
-                    'Log in to continue your journey.',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: colorScheme.onSurface.withAlpha(153),
-                    ),
-                  ).animate().fadeIn(delay: const Duration(milliseconds: 200)),
-                  
-                  const SizedBox(height: 60),
-                  
-                  _buildTextField(
-                    controller: _emailController,
-                    label: 'Email',
-                    icon: Icons.email_outlined,
-                  ).animate().fadeIn(delay: const Duration(milliseconds: 400)).slideY(begin: 0.1, end: 0),
-                  
-                  const SizedBox(height: 20),
-                  
-                  _buildTextField(
-                    controller: _passwordController,
-                    label: 'Password',
-                    icon: Icons.lock_outline,
-                    isPassword: true,
-                  ).animate().fadeIn(delay: const Duration(milliseconds: 500)).slideY(begin: 0.1, end: 0),
-                  
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: _onResetPassword,
-                      child: Text(
-                        'Forgot Password?',
-                        style: TextStyle(color: colorScheme.primary, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ).animate().fadeIn(delay: const Duration(milliseconds: 600)),
-                  
-                  const SizedBox(height: 30),
-                  
-                  SizedBox(
-                    width: double.infinity,
-                    height: 60,
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : _onLogin,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colorScheme.primary,
-                        foregroundColor: colorScheme.onPrimary,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                      ),
-                      child: _isLoading 
-                        ? const CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
-                        : const Text('Login', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    ),
-                  ).animate().fadeIn(delay: const Duration(milliseconds: 700)).scale(begin: const Offset(0.95, 0.95)),
-                  
-                  const SizedBox(height: 24),
-                  
-                  Center(
-                    child: TextButton(
-                      onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const SignupScreen()),
-                      ),
-                      child: RichText(
-                        text: TextSpan(
-                          style: TextStyle(color: colorScheme.onSurface.withAlpha(153), fontSize: 16),
-                          children: [
-                            const TextSpan(text: "Don't have an account? "),
-                            TextSpan(
-                              text: 'Sign Up',
-                              style: TextStyle(color: colorScheme.primary, fontWeight: FontWeight.bold),
-                            ),
-                          ],
+                  // Login Card
+                  Container(
+                    padding: const EdgeInsets.all(32),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(20),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
                         ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        _buildTextField(
+                          controller: _emailController,
+                          label: 'Email',
+                          icon: Icons.email_rounded,
+                        ),
+                        const SizedBox(height: 20),
+                        _buildTextField(
+                          controller: _passwordController,
+                          label: 'Password',
+                          icon: Icons.lock_rounded,
+                          isPassword: true,
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: _onResetPassword,
+                            child: Text('Forgot Password?', style: TextStyle(color: colorScheme.secondary)),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 55,
+                          child: ElevatedButton(
+                            onPressed: _isLoading ? null : _onLogin,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: colorScheme.primary,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              elevation: 5,
+                              shadowColor: colorScheme.primary.withAlpha(100),
+                            ),
+                            child: _isLoading 
+                              ? const CircularProgressIndicator(color: Colors.white)
+                              : const Text('LOGIN', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                          ),
+                        ).animate().scale(delay: 400.ms),
+                      ],
+                    ),
+                  ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1, end: 0),
+                  
+                  const SizedBox(height: 40),
+                  
+                  TextButton(
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const SignupScreen()),
+                    ),
+                    child: RichText(
+                      text: TextSpan(
+                        style: const TextStyle(color: Colors.grey, fontSize: 16),
+                        children: [
+                          const TextSpan(text: "New here? "),
+                          TextSpan(
+                            text: 'Create Account',
+                            style: TextStyle(color: colorScheme.primary, fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                     ),
-                  ).animate().fadeIn(delay: const Duration(milliseconds: 900)),
+                  ).animate().fadeIn(delay: 600.ms),
                 ],
               ),
             ),
@@ -201,21 +200,22 @@ class _LoginScreenState extends State<LoginScreen> {
     bool isPassword = false,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest.withAlpha(76),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: colorScheme.outline.withAlpha(25)),
-      ),
-      child: TextField(
-        controller: controller,
-        obscureText: isPassword,
-        decoration: InputDecoration(
-          labelText: label,
-          prefixIcon: Icon(icon, color: colorScheme.primary),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+    return TextField(
+      controller: controller,
+      obscureText: isPassword,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon, color: colorScheme.primary),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(color: Colors.grey.shade200),
         ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(color: colorScheme.primary, width: 2),
+        ),
+        filled: true,
+        fillColor: Colors.grey.shade50,
       ),
     );
   }
