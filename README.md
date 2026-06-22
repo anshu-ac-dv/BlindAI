@@ -1,41 +1,35 @@
-# 👁️ Blind AI - Visionary Voice Assistant
+# 👁️ Blind AI - UI/UX Prototype
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
-[![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
-[![Gemini](https://img.shields.io/badge/Google%20Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white)](https://aistudio.google.com/)
+[![Design](https://img.shields.io/badge/Design-Glassmorphism-pink)](https://flutter.dev)
 
-**Blind AI** is a cutting-edge mobile assistant designed to empower visually impaired users. By combining the power of **Google Gemini 1.5 Flash** with a highly accessible, animated interface, it acts as a digital "set of eyes" for those who need it most.
-
----
-
-## ✨ Key Features
-
-- **📸 Intelligent Vision**: Snap a photo, and the AI provides a detailed, context-aware description of your surroundings.
-- **🗣️ Voice-First Interaction**: Designed for accessibility with high-contrast UI and voice-compatible layouts.
-- **🎭 Fluid Experience**: Powered by `flutter_animate`, the app features a "living" UI that pulses and reacts to user input.
-- **🔐 Secure Access**: Robust authentication powered by Firebase, ensuring user data and chat history remain private.
-- **🌈 Modern Design**: A premium Indigo & Pink glassmorphism theme that is both beautiful and functional.
+**Blind AI** is a high-fidelity UI/UX prototype for a mobile assistant designed to empower visually impaired users. This version focuses on a premium, animated interface and fluid user experience.
 
 ---
 
-## 🏗️ Clean Architecture
+## ✨ Key Features (Frontend Demo)
 
-The project follows a modular **Clean Architecture** pattern to ensure scalability and maintainability:
+- **📸 Vision UI**: A modern interface for image capture and AI interaction.
+- **🎭 Fluid Animations**: Powered by `flutter_animate`, featuring a "living" UI with pulsing effects and smooth transitions.
+- **🌈 Premium Design**: Modern Blue glassmorphism theme that is both beautiful and functional.
+- **📱 Responsive Layout**: Optimized for mobile with high-contrast elements and accessible navigation.
 
--   📂 `lib/core`: The backbone. Contains shared models, navigation utilities, and base services (TTS/Speech).
--   📂 `lib/features/auth`: Handles user identity, signup, login, and password recovery.
--   📂 `lib/features/chat`: The "brain" of the app. Manages Gemini AI integration and image processing.
--   📂 `lib/features/splash`: Manages app initialization and routing logic.
+---
+
+## 🏗️ Project Structure
+
+-   📂 `lib/features/splash`: Animated entry sequence.
+-   📂 `lib/features/auth`: Modern Login and Signup UI flows.
+-   📂 `lib/features/chat`: The core interaction interface with camera support.
+-   📂 `lib/core`: Shared models and utility classes.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Framework**: [Flutter](https://flutter.dev) (Multi-platform)
-- **AI Engine**: [Google Generative AI](https://pub.dev/packages/google_generative_ai) (Gemini 1.5 Flash)
-- **Backend**: [Firebase Auth](https://firebase.google.com/products/auth)
+- **Framework**: [Flutter](https://flutter.dev)
 - **Animations**: [Flutter Animate](https://pub.dev/packages/flutter_animate)
-- **Environment**: [Flutter Dotenv](https://pub.dev/packages/flutter_dotenv) for secure API key management.
+- **Icons**: Material Design Rounded
 
 ---
 
@@ -43,10 +37,8 @@ The project follows a modular **Clean Architecture** pattern to ensure scalabili
 
 ### Prerequisites
 - Flutter SDK (`>=3.0.0`)
-- A Firebase Project
-- A Gemini API Key (get it at [Google AI Studio](https://aistudio.google.com/))
 
-### Installation
+### Installation & Run
 
 1. **Clone the repository**
    ```bash
@@ -54,37 +46,16 @@ The project follows a modular **Clean Architecture** pattern to ensure scalabili
    cd blind_ai
    ```
 
-2. **Setup Environment Variables**
-   Create a `.env` file in the root directory:
-   ```env
-   GEMINI_API_KEY=your_actual_key_here
-   ```
-
-3. **Install Dependencies**
+2. **Install Dependencies**
    ```bash
    flutter pub get
    ```
 
-4. **Run the App**
+3. **Run the App**
    ```bash
    flutter run
    ```
 
 ---
-
-## 🤝 Contributing
-
-Contributions make the open-source community an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-Distributed under the MIT License. See `LICENSE` for more information.
 
 <p align="center">Made with ❤️ for a more accessible world.</p>
