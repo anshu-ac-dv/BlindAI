@@ -9,6 +9,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  firebase_core: ^4.11.0
+  firebase_auth: ^6.5.4
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.8
+  dartz: ^0.10.1
+  get_it: ^9.2.1
 
 dev_dependencies:
   flutter_test:
