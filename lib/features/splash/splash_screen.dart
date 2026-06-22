@@ -111,9 +111,9 @@ class _SplashScreenState extends State<SplashScreen> {
                 
                 const SizedBox(height: 30),
                 
-                Text(
+                const Text(
                   'Blind AI',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 48,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
