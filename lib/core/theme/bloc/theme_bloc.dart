@@ -40,9 +40,17 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
 
     on<ToggleThemeEvent>((event, emit) async {
       final prefs = await SharedPreferences.getInstance();
-      final isDark = state.themeMode == ThemeMode.dark;
-      final newMode = isDark ? ThemeMode.light : ThemeMode.dark;
-      await prefs.setBool(_themeKey, !isDark);
+      
+      // Determine if the current effective theme is dark
+      bool isCurrentlyDark;
+      if (state.themeMode == ThemeMode.system) {
+        isCurrentlyDark = WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
+      } else {
+        isCurrentlyDark = state.themeMode == ThemeMode.dark;
+      }
+      
+      final newMode = isCurrentlyDark ? ThemeMode.light : ThemeMode.dark;
+      await prefs.setBool(_themeKey, !isCurrentlyDark);
       emit(ThemeState(newMode));
     });
   }

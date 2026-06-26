@@ -13,7 +13,7 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   //! Core
-  sl.registerFactory(() => ThemeBloc());
+  sl.registerLazySingleton(() => ThemeBloc());
 
   //! Features - Authentication
   
