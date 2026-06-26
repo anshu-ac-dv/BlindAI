@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:blind_ai/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:blind_ai/features/auth/presentation/bloc/auth_state.dart';
-import 'package:blind_ai/features/auth/presentation/bloc/auth_event.dart';
-import 'package:blind_ai/features/auth/presentation/pages/login_page.dart';
-import 'package:blind_ai/core/presentation/widgets/app_logo.dart';
-import 'package:blind_ai/core/theme/bloc/theme_bloc.dart';
+import '../../../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../../../features/auth/presentation/bloc/auth_state.dart';
+import '../../../../features/auth/presentation/bloc/auth_event.dart';
+import '../../../../features/auth/presentation/pages/login_page.dart';
+import '../../../../core/presentation/widgets/app_logo.dart';
+import '../../../../core/theme/bloc/theme_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
                 const AppLogo(size: 24, isAnimated: false),
                 const SizedBox(width: 8),
                 Text(
-                  'Blind AI',
+                  'BlinAI',
                   style: GoogleFonts.outfit(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,

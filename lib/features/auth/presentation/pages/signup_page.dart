@@ -5,8 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
-import 'package:blind_ai/features/home/presentation/pages/home_page.dart';
-import 'package:blind_ai/core/presentation/widgets/app_logo.dart';
+import '../../../home/presentation/pages/home_page.dart';
+import '../../../../core/presentation/widgets/app_logo.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});

@@ -5,10 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
-import 'package:blind_ai/features/auth/presentation/pages/signup_page.dart';
-import 'package:blind_ai/features/auth/presentation/pages/forgot_password_page.dart';
-import 'package:blind_ai/features/home/presentation/pages/home_page.dart';
-import 'package:blind_ai/core/presentation/widgets/app_logo.dart';
+import 'signup_page.dart';
+import 'forgot_password_page.dart';
+import '../../../home/presentation/pages/home_page.dart';
+import '../../../../core/presentation/widgets/app_logo.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

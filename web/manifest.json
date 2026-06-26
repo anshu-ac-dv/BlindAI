@@ -1,6 +1,6 @@
 {
-    "name": "blind_ai",
-    "short_name": "blind_ai",
+    "name": "BlinAI",
+    "short_name": "BlinAI",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

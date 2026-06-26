@@ -1,8 +1,8 @@
-# 👁️ Blind AI
+# 👁️ BlinAI
 
 **Perceive with intelligence.**
 
-Blind AI is a modern Flutter application designed to provide intelligent assistance through a sleek, accessible, and high-performance interface. Built with a focus on dark aesthetics and smooth animations, it leverages the power of AI to help users perceive their surroundings.
+BlinAI is a modern Flutter application designed to provide intelligent assistance through a sleek, accessible, and high-performance interface. Built with a focus on dark aesthetics and smooth animations, it leverages the power of AI to help users perceive their surroundings.
 
 ---
 

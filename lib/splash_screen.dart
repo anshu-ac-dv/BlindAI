@@ -4,9 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_state.dart';
-import 'package:blind_ai/features/auth/presentation/pages/login_page.dart';
-import 'package:blind_ai/features/home/presentation/pages/home_page.dart';
-import 'package:blind_ai/core/presentation/widgets/app_logo.dart';
+import 'features/auth/presentation/pages/login_page.dart';
+import 'features/home/presentation/pages/home_page.dart';
+import 'core/presentation/widgets/app_logo.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -136,7 +136,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 
                 // App Name with modern styling
                 Text(
-                  'BLIND AI',
+                  'BLINAI',
                   style: GoogleFonts.outfit(
                     fontSize: 48,
                     fontWeight: FontWeight.w800,
