@@ -10,6 +10,16 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.9
+  animations: ^2.2.0
+  google_fonts: ^8.1.0
+  flutter_animate: ^4.5.2
+  flutter_bloc: ^9.1.1
+  firebase_core: ^4.11.0
+  firebase_auth: ^6.5.4
+  equatable: ^2.0.8
+  get_it: ^9.2.1
+  dartz: ^0.10.1
+  shared_preferences: ^2.5.5
 
 dev_dependencies:
   flutter_test:
