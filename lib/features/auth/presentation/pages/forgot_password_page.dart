@@ -6,6 +6,7 @@ import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
 import '../../../../core/presentation/widgets/app_logo.dart';
+import '../../../../core/presentation/widgets/custom_snack_bar.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -23,13 +24,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is ForgotPasswordSent) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Password reset link sent to your email!'), backgroundColor: Colors.green),
+            CustomSnackBar.show(
+              context,
+              message: 'Password reset link sent to your email!',
+              type: SnackBarType.success,
             );
             Navigator.pop(context);
           } else if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+            CustomSnackBar.show(
+              context,
+              message: state.message,
+              type: SnackBarType.error,
             );
           }
         },
@@ -107,8 +112,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                     : () {
                                         final email = _emailController.text.trim();
                                         if (email.isEmpty) {
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            const SnackBar(content: Text('Please enter your email')),
+                                          CustomSnackBar.show(
+                                            context,
+                                            message: 'Please enter your email',
+                                            type: SnackBarType.error,
                                           );
                                           return;
                                         }

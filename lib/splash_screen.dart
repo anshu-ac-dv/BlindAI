@@ -136,7 +136,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 
                 // App Name with modern styling
                 Text(
-                  'BLINAI',
+                  'BLINDAI',
                   style: GoogleFonts.outfit(
                     fontSize: 48,
                     fontWeight: FontWeight.w800,

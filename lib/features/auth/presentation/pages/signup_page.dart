@@ -7,6 +7,7 @@ import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
 import '../../../home/presentation/pages/home_page.dart';
 import '../../../../core/presentation/widgets/app_logo.dart';
+import '../../../../core/presentation/widgets/custom_snack_bar.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -32,8 +33,10 @@ class _SignupPageState extends State<SignupPage> {
               (route) => false,
             );
           } else if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+            CustomSnackBar.show(
+              context,
+              message: state.message,
+              type: SnackBarType.error,
             );
           }
         },
@@ -124,8 +127,10 @@ class _SignupPageState extends State<SignupPage> {
                                           final name = _nameController.text.trim();
 
                                           if (email.isEmpty || password.isEmpty || name.isEmpty) {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(content: Text('Please fill all fields')),
+                                            CustomSnackBar.show(
+                                              context,
+                                              message: 'Please fill all fields',
+                                              type: SnackBarType.error,
                                             );
                                             return;
                                           }

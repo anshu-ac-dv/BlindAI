@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'BlinAI',
+            title: 'BlindAI',
             themeMode: state.themeMode,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,

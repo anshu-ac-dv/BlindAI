@@ -8,6 +8,7 @@ import '../../../../features/auth/presentation/bloc/auth_event.dart';
 import '../../../../features/auth/presentation/pages/login_page.dart';
 import '../../../../core/presentation/widgets/app_logo.dart';
 import '../../../../core/theme/bloc/theme_bloc.dart';
+import '../../../../core/presentation/widgets/custom_snack_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -31,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                 const AppLogo(size: 24, isAnimated: false),
                 const SizedBox(width: 8),
                 Text(
-                  'BlinAI',
+                  'BlindAI',
                   style: GoogleFonts.outfit(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -58,6 +59,11 @@ class HomeScreen extends StatelessWidget {
                 icon: Icon(Icons.logout_rounded, color: isDark ? Colors.white70 : Colors.black54),
                 onPressed: () {
                   context.read<AuthBloc>().add(LogoutRequested());
+                  CustomSnackBar.show(
+                    context,
+                    message: 'Logged out successfully',
+                    type: SnackBarType.success,
+                  );
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => const LoginPage()),
                     (route) => false,

@@ -9,6 +9,7 @@ import 'signup_page.dart';
 import 'forgot_password_page.dart';
 import '../../../home/presentation/pages/home_page.dart';
 import '../../../../core/presentation/widgets/app_logo.dart';
+import '../../../../core/presentation/widgets/custom_snack_bar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -32,8 +33,10 @@ class _LoginPageState extends State<LoginPage> {
               MaterialPageRoute(builder: (context) => const HomeScreen()),
             );
           } else if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+            CustomSnackBar.show(
+              context,
+              message: state.message,
+              type: SnackBarType.error,
             );
           }
         },
@@ -135,8 +138,10 @@ class _LoginPageState extends State<LoginPage> {
                                           final password = _passwordController.text.trim();
                                           
                                           if (email.isEmpty || password.isEmpty) {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(content: Text('Please fill all fields')),
+                                            CustomSnackBar.show(
+                                              context,
+                                              message: 'Please fill all fields',
+                                              type: SnackBarType.error,
                                             );
                                             return;
                                           }
