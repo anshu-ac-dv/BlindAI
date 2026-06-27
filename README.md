@@ -1,4 +1,4 @@
-# <p align="center">👁️ BlindAI</p>
+# <p align="center"><img src="web/icons/Icon-512.png" alt="BlindAI Logo" width="120" /><br>BlindAI</p>
 
 <p align="center">
   <strong>Perceive the world through intelligent, voice-guided vision.</strong>
