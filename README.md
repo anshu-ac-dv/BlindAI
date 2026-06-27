@@ -1,8 +1,4 @@
-# <p align="center"><img src="web/icons/Icon-512.png" alt="BlindAI Logo" width="120" /><br>BlindAI</p>
-
-<p align="center">
-  <strong>Perceive the world through intelligent, voice-guided vision.</strong>
-</p>
+# <p align="center"><img src="web/icons/Icon-512.png" alt="BlindAI Logo" width="120" /><br><strong>BLINDAI</strong><br><small>Perceive with intelligence</small></p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter" />
