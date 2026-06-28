@@ -59,19 +59,23 @@ class HomeDrawer extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (_) => const SupportPage()));
                   },
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                  child: Divider(color: Colors.white10),
-                ),
-                _buildDrawerItem(
-                  context,
-                  icon: Icons.logout_rounded,
-                  title: 'Logout',
-                  textColor: const Color(0xFFFF4081),
-                  iconColor: const Color(0xFFFF4081),
-                  onTap: () => _handleLogout(context),
-                ),
               ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Divider(color: isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.05)),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+            child: _buildDrawerItem(
+              context,
+              icon: Icons.logout_rounded,
+              title: 'Logout',
+              textColor: const Color(0xFFFF4081),
+              iconColor: const Color(0xFFFF4081),
+              showArrow: false,
+              onTap: () => _handleLogout(context),
             ),
           ),
           _buildFooter(context),
@@ -82,7 +86,7 @@ class HomeDrawer extends StatelessWidget {
 
   Widget _buildSectionHeader(BuildContext context, String title) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
       child: Text(
         title,
         style: GoogleFonts.outfit(
@@ -103,9 +107,9 @@ class HomeDrawer extends StatelessWidget {
         String initial = "G";
 
         if (state is Authenticated) {
-          name = state.user.displayName ?? state.user.email.split('@').first;
+          name = state.user.fullName;
           email = state.user.email;
-          initial = name.isNotEmpty ? name[0].toUpperCase() : "U";
+          initial = state.user.initials;
         }
 
         return Container(
@@ -184,6 +188,7 @@ class HomeDrawer extends StatelessWidget {
     required VoidCallback onTap,
     Color? textColor,
     Color? iconColor,
+    bool showArrow = true,
   }) {
     return Material(
       color: Colors.transparent,
@@ -215,12 +220,14 @@ class HomeDrawer extends StatelessWidget {
                   color: textColor ?? (isDark ? Colors.white : Colors.black87),
                 ),
               ),
-              const Spacer(),
-              Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 14,
-                color: isDark ? Colors.white10 : Colors.black12,
-              ),
+              if (showArrow) ...[
+                const Spacer(),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 14,
+                  color: isDark ? Colors.white10 : Colors.black12,
+                ),
+              ],
             ],
           ),
         ),

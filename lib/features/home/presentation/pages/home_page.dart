@@ -148,7 +148,6 @@ class HomeView extends StatelessWidget {
         builder: (context) => BlocBuilder<AuthBloc, AuthState>(
           builder: (context, authState) {
             if (authState is Authenticated) {
-              final initial = (authState.user.displayName ?? authState.user.email)[0].toUpperCase();
               return GestureDetector(
                 onTap: () => Scaffold.of(context).openDrawer(),
                 child: Padding(
@@ -162,7 +161,7 @@ class HomeView extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        initial,
+                        authState.user.initials,
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -222,18 +221,7 @@ class HomeView extends StatelessWidget {
   Widget _buildWelcomeText() {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, authState) {
-        String name = "Friend";
-        if (authState is Authenticated) {
-          final displayName = authState.user.displayName;
-          if (displayName != null && displayName.isNotEmpty) {
-            name = displayName.split(' ').first;
-          } else {
-            name = authState.user.email.split('@').first;
-            name = name.isNotEmpty
-                ? '${name[0].toUpperCase()}${name.substring(1)}'
-                : 'Friend';
-          }
-        }
+        final name = (authState is Authenticated) ? authState.user.firstName : "Friend";
         return Text(
           name,
           style: GoogleFonts.outfit(
