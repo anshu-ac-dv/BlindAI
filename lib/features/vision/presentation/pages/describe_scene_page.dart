@@ -111,14 +111,14 @@ class DescribeSceneView extends StatelessWidget {
     return Column(
       children: [
         Icon(
-          Icons.visibility_outlined,
+          Icons.wb_twilight_rounded,
           size: 80,
           color: const Color(0xFF673AB7).withValues(alpha: 0.5),
         ).animate(onPlay: (c) => c.repeat(reverse: true))
          .scale(begin: const Offset(1, 1), end: const Offset(1.1, 1.1), duration: 2.seconds),
         const SizedBox(height: 24),
         Text(
-          'Scene Description',
+          'Scene Explorer',
           style: GoogleFonts.outfit(
             fontSize: 24,
             fontWeight: FontWeight.w600,
@@ -129,7 +129,7 @@ class DescribeSceneView extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Text(
-            'Hold your camera up to describe the objects and people around you.',
+            'Capture your surroundings to get a detailed audio description of the scene.',
             textAlign: TextAlign.center,
             style: GoogleFonts.outfit(
               fontSize: 16,

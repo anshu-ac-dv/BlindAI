@@ -5,7 +5,7 @@ import '../../domain/repositories/home_repository.dart';
 class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<Either<Failure, String>> processCommand(String command) async {
-    // For now, we simulate a process. In future, this will call a RemoteDataSource (Gemini API)
+    // For now, we simulate a process.
     await Future.delayed(const Duration(milliseconds: 500));
     return Right('Processed: $command');
   }
