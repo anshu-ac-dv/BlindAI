@@ -1,4 +1,12 @@
-# <p align="center"><img src="web/icons/Icon-512.png" alt="BlindAI Logo" width="120" /><br><strong>BLINDAI</strong><br><small>Perceive with intelligence</small></p>
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=673AB7&height=200&section=header&text=BLIND%20AI&fontSize=80&animation=fadeIn&fontAlignY=35" />
+</p>
+
+<p align="center">
+  <img src="web/icons/Icon-512.png" alt="BlindAI Logo" width="100" />
+  <br>
+  <strong>✨ Perceive with intelligence ✨</strong>
+</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter" />
