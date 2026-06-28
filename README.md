@@ -8,9 +8,17 @@
   <img src="https://img.shields.io/badge/Material--3-7C4DFF?style=for-the-badge&logo=materialdesign&logoColor=white" alt="Material 3" />
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome" />
+  <img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=flat-square" alt="Maintained" />
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="License" />
+</p>
+
 ---
 
-## 🌟 The Vision
+## 🌌 The Vision
+
+> "Empowering the visually impaired to navigate the world with confidence and independence through the power of AI."
 
 **BlindAI** is an advanced assistive ecosystem designed to empower visually impaired individuals. It leverages state-of-the-art **Artificial Intelligence** and **Computer Vision** to provide real-time environment interpretation, turning visual data into actionable audio feedback.
 
@@ -20,30 +28,25 @@ Built with a **Deep Dark** aesthetic for high-contrast accessibility and a **Voi
 
 ## ✨ Intelligent Features
 
-### 🎙️ Voice Interaction
-- **Smart Command Processing**: Use natural language to navigate the app and trigger AI functions.
-- **Interactive Voice Feedback**: Real-time audio cues and detailed descriptions of all AI operations.
-
-### 📸 Computer Vision Suite
-- **Scene Intelligence**: High-fidelity descriptions of surroundings, identifying objects, people, and spatial layouts.
-- **OCR Engine (Text-to-Speech)**: Rapidly extract text from any surface and hear it read aloud with natural-sounding voices.
-- **Color Specialist**: Accurate color detection to assist in daily tasks, from matching outfits to identifying groceries.
-
-### 🛠️ Core Capabilities
-- **Secure Cloud Sync**: All activity history and settings are securely backed up using Firebase.
-- **Deep Dark Mode**: A signature `#121212` theme designed specifically for maximum readability and reduced eye strain.
-- **Haptic Navigation**: Tactile feedback for every interaction, ensuring confidence during usage.
+| Feature | Description | Icon |
+| :--- | :--- | :---: |
+| **Voice Interaction** | Smart Command Processing & Interactive Voice Feedback | 🎙️ |
+| **Scene Intelligence** | High-fidelity descriptions of surroundings | 📸 |
+| **OCR Engine** | Text-to-Speech: Extract and hear text from any surface | 📄 |
+| **Color Specialist** | Accurate color detection for daily tasks | 🎨 |
+| **Secure Sync** | Firebase backed activity history and settings | ☁️ |
+| **Haptic Navigation** | Tactile feedback for every interaction | 📳 |
 
 ---
 
 ## 🏗️ Architectural Excellence
 
-BlindAI follows the **Clean Architecture** pattern, ensuring the project remains scalable, testable, and maintainable as it grows.
+BlindAI follows the **Clean Architecture** pattern, ensuring the project remains scalable, testable, and maintainable.
 
 ### 📐 Layer Breakdown
-- **Domain Layer**: Contains pure business logic, entities, and use cases (e.g., `ProcessCommandUseCase`).
-- **Data Layer**: Manages data flow from Firebase, ML Kit, and local repositories.
-- **Presentation Layer**: Implements **BLoC/Cubit** for robust state management and Material 3 for the UI.
+- **🔵 Domain Layer**: Pure business logic, entities, and use cases.
+- **🟢 Data Layer**: Data flow from Firebase, ML Kit, and local repositories.
+- **🔴 Presentation Layer**: BLoC/Cubit state management and Material 3 UI.
 
 ---
 
@@ -51,12 +54,11 @@ BlindAI follows the **Clean Architecture** pattern, ensuring the project remains
 
 | Element | Specification |
 | :--- | :--- |
-| **Theme System** | Adaptive Dark/Light (Optimized for Accessibility) |
-| **Primary Color** | Deep Purple (`#673AB7`) |
-| **Accent Color** | Vibrant Pink (`#FF4081`) |
-| **Typography** | Poppins (Google Fonts) |
-| **Corner Radius** | 15px (Fluid Material 3 Style) |
-| **Animations** | `flutter_animate` for smooth transitions |
+| **Theme System** | 🌙 Adaptive Dark/Light (Optimized) |
+| **Primary Color** | 🟣 Deep Purple (`#673AB7`) |
+| **Accent Color** | 💖 Vibrant Pink (`#FF4081`) |
+| **Typography** | 🖋️ Poppins (Google Fonts) |
+| **Animations** | ✨ `flutter_animate` |
 
 ---
 
@@ -64,15 +66,15 @@ BlindAI follows the **Clean Architecture** pattern, ensuring the project remains
 
 ```text
 lib/
-├── core/                # Shared utilities, themes, and global error handling
-├── features/            # Feature-driven modules (Auth, Vision, Home, etc.)
-│   ├── auth/            # Firebase Authentication logic & UI
-│   ├── vision/          # AI processing for Scene, Text, and Color
-│   ├── home/            # Voice-enabled command center
-│   ├── history/         # Searchable log of past interactions
-│   └── settings/        # Voice speed and theme personalization
-├── injection_container.dart # Service Locator (Get_It) configuration
-└── main.dart            # Entry point for the Flutter application
+├── ⚙️ core/                # Utilities, themes, and global error handling
+├── 📦 features/            # Feature-driven modules
+│   ├── 🔐 auth/            # Firebase Authentication
+│   ├── 👁️ vision/          # Scene, Text, and Color AI
+│   ├── 🏠 home/            # Voice-enabled command center
+│   ├── 📜 history/         # Searchable interaction logs
+│   └── 🛠️ settings/        # Personalization
+├── 💉 injection_container.dart
+└── 🚀 main.dart            # Entry point
 ```
 
 ---
@@ -90,8 +92,7 @@ lib/
     ```
 
 3.  **Firebase Configuration**
-    *   Initialize Firebase for your project.
-    *   Place `google-services.json` / `GoogleService-Info.plist` in the respective folders.
+    *   Initialize Firebase and place `google-services.json` / `GoogleService-Info.plist` in the respective folders.
 
 4.  **Run the App**
     ```bash
@@ -103,4 +104,8 @@ lib/
 <p align="center">
   <strong>Committed to building a world without visual barriers.</strong><br>
   Developed with ❤️ using Flutter & Firebase.
+</p>
+
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=100&section=footer" />
 </p>
