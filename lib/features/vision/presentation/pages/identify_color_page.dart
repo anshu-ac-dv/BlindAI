@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../injection_container.dart';
+import '../../../../core/presentation/widgets/custom_snack_bar.dart';
 import '../bloc/vision_bloc.dart';
 import '../bloc/vision_event.dart';
 import '../bloc/vision_state.dart';
@@ -47,8 +48,10 @@ class IdentifyColorView extends StatelessWidget {
       body: BlocConsumer<VisionBloc, VisionState>(
         listener: (context, state) {
           if (state is VisionError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
+            CustomSnackBar.show(
+              context,
+              message: state.message,
+              type: SnackBarType.error,
             );
           }
         },
