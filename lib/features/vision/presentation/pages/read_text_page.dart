@@ -81,7 +81,7 @@ class ReadTextView extends StatelessWidget {
                 
                 if (state is! VisionLoading)
                   GestureDetector(
-                    onTap: () => context.read<VisionBloc>().add(CaptureImageRequested()),
+                    onTap: () => context.read<VisionBloc>().add(const CaptureImageRequested(VisionTask.readText)),
                     child: Container(
                       width: 80,
                       height: 80,

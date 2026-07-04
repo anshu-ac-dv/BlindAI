@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+enum VisionTask { describe, readText, identifyColor }
+
 abstract class VisionEvent extends Equatable {
   const VisionEvent();
 
@@ -7,4 +9,11 @@ abstract class VisionEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class CaptureImageRequested extends VisionEvent {}
+class CaptureImageRequested extends VisionEvent {
+  final VisionTask task;
+
+  const CaptureImageRequested(this.task);
+
+  @override
+  List<Object> get props => [task];
+}

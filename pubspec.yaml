@@ -21,6 +21,7 @@ dependencies:
   dartz: ^0.10.1
   shared_preferences: ^2.5.5
   image_picker: ^1.2.2
+  google_generative_ai: ^0.4.10
 
 dev_dependencies:
   flutter_test:

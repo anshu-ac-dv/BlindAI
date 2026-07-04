@@ -81,7 +81,7 @@ class DescribeSceneView extends StatelessWidget {
                 
                 if (state is! VisionLoading)
                   GestureDetector(
-                    onTap: () => context.read<VisionBloc>().add(CaptureImageRequested()),
+                    onTap: () => context.read<VisionBloc>().add(const CaptureImageRequested(VisionTask.describe)),
                     child: Container(
                       width: 80,
                       height: 80,

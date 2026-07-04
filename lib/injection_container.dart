@@ -11,6 +11,8 @@ import 'features/home/presentation/bloc/home_bloc.dart';
 import 'features/home/domain/usecases/process_command_usecase.dart';
 import 'features/home/domain/repositories/home_repository.dart';
 import 'features/home/data/repositories/home_repository_impl.dart';
+import 'package:image_picker/image_picker.dart';
+import 'core/services/ai_service.dart';
 import 'features/vision/presentation/bloc/vision_bloc.dart';
 import 'core/theme/bloc/theme_bloc.dart';
 
@@ -19,6 +21,8 @@ final sl = GetIt.instance;
 Future<void> init() async {
   //! Core
   sl.registerLazySingleton(() => ThemeBloc());
+  sl.registerLazySingleton(() => AIService());
+  sl.registerLazySingleton(() => ImagePicker());
 
   //! Features - Authentication
   
@@ -53,7 +57,10 @@ Future<void> init() async {
   sl.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl());
 
   //! Features - Vision
-  sl.registerFactory(() => VisionBloc());
+  sl.registerFactory(() => VisionBloc(
+        aiService: sl(),
+        imagePicker: sl(),
+      ));
 
   //! External
   final auth = FirebaseAuth.instance;
