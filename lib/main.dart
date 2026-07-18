@@ -12,15 +12,15 @@ import 'firebase_options.dart';
 void main() async {
   // Required for Firebase and other plugins
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize Firebase with platform-specific options
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   // Initialize Dependency Injection
   await di.init();
-  
+
   runApp(const MyApp());
 }
 
