@@ -1,0 +1,30 @@
+.chat-window {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+}
+
+.chat-window--empty {
+  align-items: center;
+}
+
+.chat-window__inner {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 20px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-window__error {
+  align-self: flex-start;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  max-width: 78%;
+}

@@ -1,0 +1,106 @@
+/* ============================================================
+   BlindAI — design tokens
+   Signature: a slow-pulsing "aperture" ring stands in for sight
+   the product doesn't have — it "listens" instead of "looking".
+   ============================================================ */
+
+:root {
+  --font-display: "Space Grotesk", "Segoe UI", sans-serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---- Dark theme (default) ---- */
+:root,
+[data-theme="dark"] {
+  --bg: #0b0c10;
+  --bg-elevated: #111319;
+  --surface: #14161c;
+  --surface-hover: #1a1d25;
+  --border: #23262f;
+  --text: #e7e7ea;
+  --text-muted: #8a8d98;
+  --accent: #7c5cff;
+  --accent-soft: rgba(124, 92, 255, 0.14);
+  --accent-text: #ffffff;
+  --danger: #ff6b6b;
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+/* ---- Light theme ---- */
+[data-theme="light"] {
+  --bg: #f7f7f9;
+  --bg-elevated: #ffffff;
+  --surface: #ffffff;
+  --surface-hover: #f0f0f4;
+  --border: #e4e4ea;
+  --text: #1a1b1f;
+  --text-muted: #6b6e78;
+  --accent: #6d4fe0;
+  --accent-soft: rgba(109, 79, 224, 0.1);
+  --accent-text: #ffffff;
+  --danger: #d9483f;
+  --shadow: 0 20px 60px rgba(20, 20, 40, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.25s var(--ease), color 0.25s var(--ease);
+}
+
+button {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+/* Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 8px;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
