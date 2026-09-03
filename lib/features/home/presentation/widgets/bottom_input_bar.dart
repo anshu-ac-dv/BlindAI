@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../core/presentation/widgets/custom_snack_bar.dart';
 
 class BottomInputBar extends StatefulWidget {
   final Function(String) onSendMessage;

@@ -19,7 +19,7 @@ export default function Header({ isThinking, onClear, hasMessages }) {
       <div className="header__actions">
         {hasMessages && (
           <button type="button" className="header__clear" onClick={onClear}>
-            Clear chat
+            New Chat
           </button>
         )}
         <ThemeToggle />

@@ -10,8 +10,6 @@ class CustomSnackBar {
     required String message,
     required SnackBarType type,
   }) {
-    final theme = Theme.of(context);
-    
     Color baseColor;
     IconData icon;
     List<Color> gradientColors;

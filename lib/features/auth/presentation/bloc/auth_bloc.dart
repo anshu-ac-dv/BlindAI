@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../domain/entities/user_entity.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../domain/usecases/signup_usecase.dart';
 import '../../domain/usecases/forgot_password_usecase.dart';
@@ -19,9 +20,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.authRepository,
   }) : super(AuthInitial()) {
     on<AuthCheckRequested>((event, emit) async {
-      await emit.forEach(
+      await emit.forEach<UserEntity?>(
         authRepository.user,
         onData: (user) => user != null ? Authenticated(user) : Unauthenticated(),
+        onError: (error, stackTrace) => Unauthenticated(),
       );
     });
 

@@ -27,14 +27,18 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 4));
     if (!mounted) return;
 
-    // Capture context-dependent objects before further async operations
     final authBloc = context.read<AuthBloc>();
     final currentState = authBloc.state;
     
     if (currentState is Authenticated || currentState is Unauthenticated) {
       _redirect(currentState);
     } else {
-      // If still initial, wait for the first definitive state from the stream
+      // Check again if state changed during delay or await stream event
+      final latestState = authBloc.state;
+      if (latestState is Authenticated || latestState is Unauthenticated) {
+        _redirect(latestState);
+        return;
+      }
       await for (final authState in authBloc.stream) {
         if (!mounted) return;
         if (authState is Authenticated || authState is Unauthenticated) {
@@ -46,6 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _redirect(AuthState state) {
+    if (!mounted) return;
     Widget nextScreen = (state is Authenticated) ? const HomeScreen() : const LoginPage();
 
     Navigator.pushReplacement(
