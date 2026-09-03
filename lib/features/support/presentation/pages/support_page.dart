@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/presentation/widgets/custom_snack_bar.dart';
+import '../../../../core/theme/bloc/theme_bloc.dart';
 
 class SupportPage extends StatelessWidget {
   const SupportPage({super.key});
@@ -11,11 +13,7 @@ class SupportPage extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F0F15) : const Color(0xFFF8F9FF),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded, 
                 color: isDark ? Colors.white70 : Colors.black87),
@@ -28,9 +26,21 @@ class SupportPage extends StatelessWidget {
             color: isDark ? Colors.white : Colors.black87,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+              color: isDark ? Colors.white70 : Colors.black87,
+            ),
+            onPressed: () {
+              context.read<ThemeBloc>().add(ToggleThemeEvent());
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         children: [
           _buildSupportCard(
             context,
@@ -41,7 +51,7 @@ class SupportPage extends StatelessWidget {
             onTap: () => CustomSnackBar.show(context, 
                 message: 'Help Center coming soon!', 
                 type: SnackBarType.info),
-          ).animate().fadeIn(delay: 100.ms).slideX(begin: 0.1, end: 0),
+          ).animate().fadeIn(delay: 100.ms).slideX(begin: 0.08, end: 0),
           const SizedBox(height: 16),
           _buildSupportCard(
             context,
@@ -52,7 +62,7 @@ class SupportPage extends StatelessWidget {
             onTap: () => CustomSnackBar.show(context, 
                 message: 'Support chat opening...', 
                 type: SnackBarType.info),
-          ).animate().fadeIn(delay: 200.ms).slideX(begin: 0.1, end: 0),
+          ).animate().fadeIn(delay: 200.ms).slideX(begin: 0.08, end: 0),
           const SizedBox(height: 16),
           _buildSupportCard(
             context,
@@ -63,7 +73,7 @@ class SupportPage extends StatelessWidget {
             onTap: () => CustomSnackBar.show(context, 
                 message: 'Bug report form opened.', 
                 type: SnackBarType.info),
-          ).animate().fadeIn(delay: 300.ms).slideX(begin: 0.1, end: 0),
+          ).animate().fadeIn(delay: 300.ms).slideX(begin: 0.08, end: 0),
         ],
       ),
     );
@@ -86,11 +96,11 @@ class SupportPage extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1E1E26) : Colors.white,
+            color: Theme.of(context).cardTheme.color,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: isDark 
-                  ? Colors.white.withValues(alpha: 0.05) 
+                  ? Colors.white10
                   : Colors.black.withValues(alpha: 0.05),
             ),
           ),
@@ -100,11 +110,11 @@ class SupportPage extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(14),
                 ),
-                child: Icon(icon, color: color),
+                child: Icon(icon, color: color, size: 26),
               ),
-              const SizedBox(width: 20),
+              const SizedBox(width: 18),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,6 +127,7 @@ class SupportPage extends StatelessWidget {
                         color: isDark ? Colors.white : Colors.black87,
                       ),
                     ),
+                    const SizedBox(height: 2),
                     Text(
                       subtitle,
                       style: GoogleFonts.outfit(

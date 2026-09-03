@@ -45,29 +45,28 @@ class _BottomInputBarState extends State<BottomInputBar> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = Theme.of(context).colorScheme.primary;
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF1E1E26) : Colors.white,
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          color: Theme.of(context).cardTheme.color,
+          borderRadius: BorderRadius.circular(28),
+          border: Border.all(
+            color: isDark ? const Color(0xFF2C2C38) : const Color(0xFFEAECEF),
+          ),
         ),
         child: Row(
           children: [
             IconButton(
-              icon: Icon(Icons.add_photo_alternate_outlined,
-                  color: theme.colorScheme.primary),
+              icon: Icon(
+                Icons.add_photo_alternate_outlined,
+                color: primaryColor,
+                size: 22,
+              ),
               onPressed: widget.onGalleryPressed,
             ),
             Expanded(
@@ -75,9 +74,11 @@ class _BottomInputBarState extends State<BottomInputBar> {
                 controller: _messageController,
                 onSubmitted: (_) => _handleSend(),
                 decoration: InputDecoration(
-                  hintText: 'Enter a prompt here',
+                  hintText: 'Enter a prompt here...',
                   hintStyle: TextStyle(
-                      color: isDark ? Colors.white38 : Colors.black38),
+                    color: isDark ? Colors.white38 : const Color(0xFF8F93A0),
+                    fontSize: 14,
+                  ),
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
@@ -90,16 +91,14 @@ class _BottomInputBarState extends State<BottomInputBar> {
               onTap: _isTyping ? _handleSend : widget.onVoicePressed,
               child: Container(
                 padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    colors: [Color(0xFF673AB7), Color(0xFFFF4081)],
-                  ),
+                  color: primaryColor,
                 ),
                 child: Icon(
                   _isTyping ? Icons.send_rounded : Icons.mic_none_rounded,
                   color: Colors.white,
-                  size: 24,
+                  size: 20,
                 ),
               ),
             ),

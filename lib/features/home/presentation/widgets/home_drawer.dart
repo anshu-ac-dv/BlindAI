@@ -8,6 +8,7 @@ import '../../../../features/auth/presentation/bloc/auth_state.dart';
 import '../../../../features/auth/presentation/bloc/auth_event.dart';
 import '../../../../features/auth/presentation/pages/login_page.dart';
 import '../../../../core/presentation/widgets/custom_snack_bar.dart';
+import '../../../../core/theme/bloc/theme_bloc.dart';
 import '../../../../features/settings/presentation/pages/settings_page.dart';
 import '../../../../features/support/presentation/pages/support_page.dart';
 import '../../../../features/history/presentation/pages/history_page.dart';
@@ -20,14 +21,14 @@ class HomeDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: isDark ? const Color(0xFF0F0F15) : const Color(0xFFF8F9FF),
-      width: MediaQuery.of(context).size.width * 0.85,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      width: MediaQuery.of(context).size.width * 0.82,
       child: Column(
         children: [
           _buildProfileHeader(context),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               children: [
                 _buildSectionHeader(context, 'MAIN'),
                 _buildDrawerItem(
@@ -39,8 +40,9 @@ class HomeDrawer extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (_) => const HistoryPage()));
                   },
                 ),
-                const SizedBox(height: 8),
-                _buildSectionHeader(context, 'APP'),
+                const SizedBox(height: 12),
+                _buildSectionHeader(context, 'PREFERENCES'),
+                _buildThemeToggleItem(context),
                 _buildDrawerItem(
                   context,
                   icon: Icons.settings_outlined,
@@ -64,10 +66,10 @@ class HomeDrawer extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Divider(color: isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.05)),
+            child: Divider(color: isDark ? Colors.white10 : Colors.black12),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
             child: _buildDrawerItem(
               context,
               icon: Icons.logout_rounded,
@@ -86,14 +88,14 @@ class HomeDrawer extends StatelessWidget {
 
   Widget _buildSectionHeader(BuildContext context, String title) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
       child: Text(
         title,
         style: GoogleFonts.outfit(
           fontSize: 11,
           fontWeight: FontWeight.bold,
           letterSpacing: 1.5,
-          color: isDark ? Colors.white24 : Colors.black26,
+          color: isDark ? Colors.white38 : Colors.black45,
         ),
       ),
     );
@@ -114,25 +116,25 @@ class HomeDrawer extends StatelessWidget {
 
         return Container(
           width: double.infinity,
-          padding: const EdgeInsets.fromLTRB(24, 60, 24, 32),
+          padding: const EdgeInsets.fromLTRB(24, 56, 24, 28),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                const Color(0xFF673AB7),
-                const Color(0xFFFF4081).withValues(alpha: 0.9)
+                Color(0xFF673AB7),
+                Color(0xFFFF4081),
               ],
             ),
             borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(32),
-              bottomRight: Radius.circular(32),
+              bottomLeft: Radius.circular(28),
+              bottomRight: Radius.circular(28),
             ),
             boxShadow: [
               BoxShadow(
                 color: const Color(0xFF673AB7).withValues(alpha: 0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
+                blurRadius: 16,
+                offset: const Offset(0, 8),
               ),
             ],
           ),
@@ -140,44 +142,88 @@ class HomeDrawer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 75,
-                height: 75,
+                width: 70,
+                height: 70,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.15),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.5), width: 2),
+                  color: Colors.white.withValues(alpha: 0.2),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.6), width: 2),
                 ),
                 child: Center(
                   child: Text(
                     initial,
                     style: GoogleFonts.outfit(
-                      fontSize: 36,
+                      fontSize: 32,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
                 ),
               ).animate().scale(duration: 400.ms, curve: Curves.easeOutBack),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               Text(
                 name,
                 style: GoogleFonts.outfit(
-                  fontSize: 22,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ).animate().fadeIn(delay: 200.ms).slideX(begin: -0.2, end: 0),
+              const SizedBox(height: 2),
               Text(
                 email,
                 style: GoogleFonts.outfit(
-                  fontSize: 14,
-                  color: Colors.white.withValues(alpha: 0.7),
+                  fontSize: 13,
+                  color: Colors.white.withValues(alpha: 0.8),
                 ),
               ).animate().fadeIn(delay: 300.ms).slideX(begin: -0.2, end: 0),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildThemeToggleItem(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+                size: 22,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                'Dark Theme',
+                style: GoogleFonts.outfit(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: isDark ? Colors.white : Colors.black87,
+                ),
+              ),
+            ),
+            Switch(
+              value: isDark,
+              activeThumbColor: Theme.of(context).colorScheme.primary,
+              onChanged: (_) {
+                context.read<ThemeBloc>().add(ToggleThemeEvent());
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -202,7 +248,7 @@ class HomeDrawer extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: (iconColor ?? (isDark ? Colors.white70 : Colors.black54)).withValues(alpha: 0.05),
+                  color: (iconColor ?? (isDark ? Colors.white70 : Colors.black54)).withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
@@ -225,7 +271,7 @@ class HomeDrawer extends StatelessWidget {
                 Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: 14,
-                  color: isDark ? Colors.white10 : Colors.black12,
+                  color: isDark ? Colors.white24 : Colors.black26,
                 ),
               ],
             ],
@@ -237,7 +283,7 @@ class HomeDrawer extends StatelessWidget {
 
   Widget _buildFooter(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -251,14 +297,14 @@ class HomeDrawer extends StatelessWidget {
                 style: GoogleFonts.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white38 : Colors.black45,
+                  color: isDark ? Colors.white54 : Colors.black54,
                 ),
               ),
               Text(
                 'v0.1.0',
                 style: GoogleFonts.outfit(
-                  fontSize: 10,
-                  color: isDark ? Colors.white24 : Colors.black26,
+                  fontSize: 11,
+                  color: isDark ? Colors.white30 : Colors.black38,
                 ),
               ),
             ],

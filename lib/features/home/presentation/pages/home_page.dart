@@ -74,8 +74,6 @@ class HomeView extends StatelessWidget {
             }
           },
           child: Scaffold(
-            backgroundColor:
-                isDark ? const Color(0xFF0F0F15) : const Color(0xFFF8F9FF),
             drawer: HomeDrawer(isDark: isDark),
             appBar: _buildAppBar(context, isDark),
             body: Stack(
@@ -90,11 +88,11 @@ class HomeView extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 40),
-                              _buildWelcomeText(),
+                              const SizedBox(height: 28),
+                              _buildWelcomeText(context, isDark),
                               const SizedBox(height: 8),
                               _buildSubTitle(isDark),
-                              const SizedBox(height: 40),
+                              const SizedBox(height: 36),
                               _buildSuggestionCards(context),
                               const SizedBox(height: 24),
                             ],
@@ -110,7 +108,7 @@ class HomeView extends StatelessWidget {
                         onGalleryPressed: () => CustomSnackBar.show(context,
                             message: 'Opening Gallery...',
                             type: SnackBarType.info),
-                      ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.5, end: 0),
+                      ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.3, end: 0),
                     ],
                   ),
                 ),
@@ -130,14 +128,14 @@ class HomeView extends StatelessWidget {
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const AppLogo(size: 24, isAnimated: false),
-          const SizedBox(width: 8),
+          const AppLogo(size: 26, isAnimated: false),
+          const SizedBox(width: 10),
           Text(
             'BlindAI',
             style: GoogleFonts.outfit(
               fontWeight: FontWeight.bold,
-              fontSize: 20,
-              color: isDark ? Colors.white : Colors.black87,
+              fontSize: 22,
+              color: isDark ? Colors.white : const Color(0xFF1A1A24),
             ),
           ),
         ],
@@ -172,8 +170,8 @@ class HomeView extends StatelessWidget {
               );
             }
             return IconButton(
-              icon: Icon(Icons.menu,
-                  color: isDark ? Colors.white70 : Colors.black54),
+              icon: Icon(Icons.menu_rounded,
+                  color: isDark ? Colors.white70 : const Color(0xFF1A1A24)),
               onPressed: () => Scaffold.of(context).openDrawer(),
             );
           },
@@ -182,8 +180,8 @@ class HomeView extends StatelessWidget {
       actions: [
         IconButton(
           icon: Icon(
-            isDark ? Icons.light_mode : Icons.dark_mode,
-            color: isDark ? Colors.white70 : Colors.black54,
+            isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+            color: isDark ? Colors.white70 : const Color(0xFF1A1A24),
           ),
           onPressed: () {
             context.read<ThemeBloc>().add(ToggleThemeEvent());
@@ -216,21 +214,27 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildWelcomeText() {
+  Widget _buildWelcomeText(BuildContext context, bool isDark) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, authState) {
         final name = (authState is Authenticated) ? authState.user.firstName : "Friend";
-        return Text(
-          name,
-          style: GoogleFonts.outfit(
-            fontSize: 32,
-            fontWeight: FontWeight.w600,
-            foreground: Paint()
-              ..shader = const LinearGradient(
-                colors: [Color(0xFF673AB7), Color(0xFFFF4081)],
-              ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0)),
-          ),
-        ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2, end: 0);
+        return Row(
+          children: [
+            Text(
+              'Hello, $name',
+              style: GoogleFonts.outfit(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: isDark ? Colors.white : const Color(0xFF1A1A24),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              '👋',
+              style: const TextStyle(fontSize: 28),
+            ),
+          ],
+        ).animate().fadeIn(duration: 500.ms).slideY(begin: 0.2, end: 0);
       },
     );
   }
@@ -239,11 +243,11 @@ class HomeView extends StatelessWidget {
     return Text(
       'How can I help you perceive the world today?',
       style: GoogleFonts.outfit(
-        fontSize: 18,
-        color: isDark ? Colors.white60 : Colors.black54,
+        fontSize: 16,
+        color: isDark ? Colors.white60 : const Color(0xFF5A5C69),
         fontWeight: FontWeight.w400,
       ),
-    ).animate().fadeIn(delay: 200.ms, duration: 600.ms);
+    ).animate().fadeIn(delay: 200.ms, duration: 500.ms);
   }
 
   Widget _buildSuggestionCards(BuildContext context) {
@@ -251,27 +255,27 @@ class HomeView extends StatelessWidget {
       children: [
         SuggestionCard(
           title: 'Describe Scene',
-          subtitle: 'Identify objects and people around you.',
+          subtitle: 'Identify objects, surroundings, and people.',
           icon: Icons.visibility_outlined,
           accentColor: const Color(0xFF673AB7),
           onTap: () => _onFeatureTap(context, 'Describe Scene'),
-        ).animate().fadeIn(delay: 400.ms).slideX(begin: 0.1, end: 0),
+        ).animate().fadeIn(delay: 300.ms).slideX(begin: 0.08, end: 0),
         const SizedBox(height: 16),
         SuggestionCard(
           title: 'Read Text',
-          subtitle: 'Listen to documents, signs, or menus.',
-          icon: Icons.text_fields_rounded,
+          subtitle: 'Listen to documents, signs, or menus read aloud.',
+          icon: Icons.document_scanner_rounded,
           accentColor: const Color(0xFFFF4081),
           onTap: () => _onFeatureTap(context, 'Read Text'),
-        ).animate().fadeIn(delay: 500.ms).slideX(begin: 0.1, end: 0),
+        ).animate().fadeIn(delay: 400.ms).slideX(begin: 0.08, end: 0),
         const SizedBox(height: 16),
         SuggestionCard(
           title: 'Identify Color',
-          subtitle: 'Know exactly what colors are in front of you.',
+          subtitle: 'Recognize exact colors in front of your camera.',
           icon: Icons.palette_outlined,
           accentColor: const Color(0xFF00BCD4),
           onTap: () => _onFeatureTap(context, 'Identify Color'),
-        ).animate().fadeIn(delay: 600.ms).slideX(begin: 0.1, end: 0),
+        ).animate().fadeIn(delay: 500.ms).slideX(begin: 0.08, end: 0),
       ],
     );
   }

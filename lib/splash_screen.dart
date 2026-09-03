@@ -23,7 +23,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _navigateToNext() async {
-    // Wait for the minimum animation time
     await Future.delayed(const Duration(seconds: 4));
     if (!mounted) return;
 
@@ -33,7 +32,6 @@ class _SplashScreenState extends State<SplashScreen> {
     if (currentState is Authenticated || currentState is Unauthenticated) {
       _redirect(currentState);
     } else {
-      // Check again if state changed during delay or await stream event
       final latestState = authBloc.state;
       if (latestState is Authenticated || latestState is Unauthenticated) {
         _redirect(latestState);
@@ -60,138 +58,57 @@ class _SplashScreenState extends State<SplashScreen> {
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
-        transitionDuration: const Duration(milliseconds: 1000),
+        transitionDuration: const Duration(milliseconds: 600),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0F15), // Deep dark background
-      body: Stack(
-        children: [
-          // Subtle Aura / Background Glow
-          Positioned(
-            top: -100,
-            right: -100,
-            child: Container(
-              width: 300,
-              height: 300,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: const Color(0xFF673AB7).withValues(alpha: 0.15),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF673AB7).withValues(alpha: 0.2),
-                    blurRadius: 100,
-                    spreadRadius: 50,
-                  ),
-                ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const AppLogo(size: 100),
+            const SizedBox(height: 32),
+            
+            Text(
+              'BLINDAI',
+              style: GoogleFonts.outfit(
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 6,
+                color: isDark ? Colors.white : const Color(0xFF1F1F2C),
               ),
-            ).animate(onPlay: (controller) => controller.repeat(reverse: true))
-             .move(begin: const Offset(0, 0), end: const Offset(-20, 20), duration: 5.seconds),
-          ),
-          Positioned(
-            bottom: -50,
-            left: -50,
-            child: Container(
-              width: 250,
-              height: 250,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: const Color(0xFFFF4081).withValues(alpha: 0.1),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFFFF4081).withValues(alpha: 0.15),
-                    blurRadius: 80,
-                    spreadRadius: 40,
-                  ),
-                ],
+            ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2, end: 0),
+
+            const SizedBox(height: 8),
+            
+            Text(
+              'Perceive with intelligence',
+              style: GoogleFonts.outfit(
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+                color: isDark ? Colors.white60 : const Color(0xFF6C727F),
+                letterSpacing: 1.5,
               ),
-            ).animate(onPlay: (controller) => controller.repeat(reverse: true))
-             .move(begin: const Offset(0, 0), end: const Offset(30, -10), duration: 7.seconds),
-          ),
+            ).animate().fadeIn(delay: 400.ms, duration: 600.ms),
 
-          // Main Content
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Glowing Logo Container
-                Container(
-                  width: 160,
-                  height: 160,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        const Color(0xFF673AB7).withValues(alpha: 0.2),
-                        const Color(0xFF673AB7).withValues(alpha: 0),
-                      ],
-                    ),
-                  ),
-                  child: Center(
-                    child: const AppLogo(size: 110),
-                  ),
-                ).animate(onPlay: (controller) => controller.repeat(reverse: true))
-                 .scale(begin: const Offset(1, 1), end: const Offset(1.05, 1.05), duration: 2.seconds, curve: Curves.easeInOut),
+            const SizedBox(height: 48),
 
-                const SizedBox(height: 40),
-                
-                // App Name with modern styling
-                Text(
-                  'BLINDAI',
-                  style: GoogleFonts.outfit(
-                    fontSize: 48,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                    letterSpacing: 8,
-                  ),
-                ).animate().fadeIn(delay: 400.ms, duration: 800.ms).slideY(begin: 0.3, end: 0),
-
-                const SizedBox(height: 12),
-                
-                // Tagline with elegant styling
-                Text(
-                  'Perceive with intelligence',
-                  style: GoogleFonts.outfit(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.white.withValues(alpha: 0.6),
-                    letterSpacing: 2,
-                  ),
-                ).animate().fadeIn(delay: 1.seconds, duration: 1.seconds),
-              ],
-            ),
-          ),
-          
-          // Bottom Loading Indicator (Subtle like Gemini)
-          Positioned(
-            bottom: 60,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Container(
-                width: 40,
-                height: 2,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white.withValues(alpha: 0.1),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF673AB7), Color(0xFFFF4081)],
-                    ),
-                  ),
-                ).animate(onPlay: (controller) => controller.repeat())
-                 .shimmer(duration: 1.5.seconds),
+            SizedBox(
+              width: 36,
+              height: 36,
+              child: CircularProgressIndicator(
+                strokeWidth: 2.5,
+                color: Theme.of(context).colorScheme.primary,
               ),
-            ).animate().fadeIn(delay: 1.5.seconds),
-          ),
-        ],
+            ).animate().fadeIn(delay: 800.ms),
+          ],
+        ),
       ),
     );
   }

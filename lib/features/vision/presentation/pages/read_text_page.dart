@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../injection_container.dart';
 import '../../../../core/presentation/widgets/custom_snack_bar.dart';
+import '../../../../core/theme/bloc/theme_bloc.dart';
 import '../bloc/vision_bloc.dart';
 import '../bloc/vision_event.dart';
 import '../bloc/vision_state.dart';
@@ -28,10 +29,7 @@ class ReadTextView extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F0F15) : const Color(0xFFF8F9FF),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded, 
                 color: isDark ? Colors.white70 : Colors.black87),
@@ -44,6 +42,18 @@ class ReadTextView extends StatelessWidget {
             color: isDark ? Colors.white : Colors.black87,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+              color: isDark ? Colors.white70 : Colors.black87,
+            ),
+            onPressed: () {
+              context.read<ThemeBloc>().add(ToggleThemeEvent());
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: BlocConsumer<VisionBloc, VisionState>(
         listener: (context, state) {
@@ -57,52 +67,82 @@ class ReadTextView extends StatelessWidget {
         },
         builder: (context, state) {
           return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (state is VisionLoading)
-                  const CircularProgressIndicator()
-                else if (state is VisionSuccess)
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text(
-                      state.result,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.outfit(
-                        fontSize: 18,
-                        color: isDark ? Colors.white : Colors.black87,
-                      ),
-                    ),
-                  )
-                else
-                  _buildInitialState(isDark),
-                
-                const SizedBox(height: 60),
-                
-                if (state is! VisionLoading)
-                  GestureDetector(
-                    onTap: () => context.read<VisionBloc>().add(const CaptureImageRequested(VisionTask.readText)),
-                    child: Container(
-                      width: 80,
-                      height: 80,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (state is VisionLoading)
+                    Column(
+                      children: [
+                        const CircularProgressIndicator(),
+                        const SizedBox(height: 20),
+                        Text(
+                          'Reading text with AI...',
+                          style: GoogleFonts.outfit(
+                            fontSize: 16,
+                            color: isDark ? Colors.white70 : Colors.black87,
+                          ),
+                        ),
+                      ],
+                    )
+                  else if (state is VisionSuccess)
+                    Container(
+                      padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFFF4081), Color(0xFFFF9800)],
+                        color: Theme.of(context).cardTheme.color,
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(
+                          color: isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.05),
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFFFF4081).withValues(alpha: 0.4),
-                            blurRadius: 20,
-                            spreadRadius: 5,
+                            color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.05),
+                            blurRadius: 16,
+                            offset: const Offset(0, 6),
                           ),
                         ],
                       ),
-                      child: const Icon(Icons.document_scanner_rounded, color: Colors.white, size: 32),
-                    ).animate(onPlay: (c) => c.repeat())
-                     .shimmer(duration: 2.seconds, color: Colors.white24),
-                  ),
-              ],
+                      child: Text(
+                        state.result,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.outfit(
+                          fontSize: 18,
+                          height: 1.5,
+                          color: isDark ? Colors.white : Colors.black87,
+                        ),
+                      ),
+                    ).animate().fadeIn().scale()
+                  else
+                    _buildInitialState(context, isDark),
+                  
+                  const SizedBox(height: 48),
+                  
+                  if (state is! VisionLoading)
+                    GestureDetector(
+                      onTap: () => context.read<VisionBloc>().add(const CaptureImageRequested(VisionTask.readText)),
+                      child: Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFFFF4081), Color(0xFFFF9800)],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFFFF4081).withValues(alpha: 0.4),
+                              blurRadius: 20,
+                              spreadRadius: 5,
+                            ),
+                          ],
+                        ),
+                        child: const Icon(Icons.document_scanner_rounded, color: Colors.white, size: 32),
+                      ).animate(onPlay: (c) => c.repeat())
+                       .shimmer(duration: 2.seconds, color: Colors.white24),
+                    ),
+                ],
+              ),
             ),
           );
         },
@@ -110,27 +150,27 @@ class ReadTextView extends StatelessWidget {
     );
   }
 
-  Widget _buildInitialState(bool isDark) {
+  Widget _buildInitialState(BuildContext context, bool isDark) {
     return Column(
       children: [
         Icon(
-          Icons.text_fields_rounded,
+          Icons.document_scanner_rounded,
           size: 80,
-          color: const Color(0xFFFF4081).withValues(alpha: 0.5),
+          color: const Color(0xFFFF4081).withValues(alpha: 0.8),
         ).animate(onPlay: (c) => c.repeat(reverse: true))
-         .scale(begin: const Offset(1, 1), end: const Offset(1.1, 1.1), duration: 2.seconds),
+         .scale(begin: const Offset(1, 1), end: const Offset(1.08, 1.08), duration: 2.seconds),
         const SizedBox(height: 24),
         Text(
           'Text Reader',
           style: GoogleFonts.outfit(
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
             color: isDark ? Colors.white : Colors.black87,
           ),
         ),
         const SizedBox(height: 12),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
             'Point your camera at signs, menus, or documents to hear them read aloud.',
             textAlign: TextAlign.center,
